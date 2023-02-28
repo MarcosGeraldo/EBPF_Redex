@@ -5,7 +5,6 @@
 (define-language ebpf
 
   ;;Representação da palavra 
-  ###Titulo
   (instr ::= (word ...))
   (word ::= (immediate offset sourceReg destinationReg opcode))
   (immediate ::= natural)
