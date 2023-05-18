@@ -23,7 +23,7 @@
         ;;Boolean
          bpf-or bpf-and bpf-neg 
         ;;Shift
-         pf-lsh bpf-rsh bpf-arsh bpf-xor
+         bpf-lsh bpf-rsh bpf-arsh bpf-xor
         ;;Commands
          bpf-mov bpf-end
        ;;Jump Instructions
