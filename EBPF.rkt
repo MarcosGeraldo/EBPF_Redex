@@ -43,9 +43,8 @@
            bpf-jslt
            bpf-jsle)
   (source ::= bpf-k
-              bpf-x
-              bpf-jmp)
-  (lsb ::= number)
+              bpf-x)
+  (lsb ::= bpf-ld bpf-ldx bpf-st bpf-stx bpf-alu bpf-jmp bpf-jmp32 bpf-alu64)
 
   ;;Representação dos registradores
   (registers ::= (register ...))

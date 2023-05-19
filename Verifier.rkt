@@ -45,7 +45,7 @@
    #:codomain imputProg
    (-->(instr_0 graph_0 valid_0 pc_0)
        (instr_0 graph_1 valid_1 ,(+(term pc_0)(term 1)))
-       (where (immediate offset_0 sourceReg destinationReg (bpf-ja bpf-k 0)) (atV pc_0 instr_0) )
+       (where (immediate offset_0 sourceReg destinationReg (bpf-ja bpf-x bpf-jmp)) (atV pc_0 instr_0) )
        (where valid_1 (cmpValid valid_0 ,(< (term 0) (term offset_0))))
        (where graph_1 (buildGraph graph_0 pc_0 offset_0))
    )
@@ -57,10 +57,10 @@
 (define ProgValidate1(
   term(
         (
-        (0 1 r1 r2 (bpf-ja bpf-k 0))
-        (0 1 r1 r2 (bpf-ja bpf-k 0))
-        (0 1 r5 r6 (bpf-ja bpf-k 0))
-        (0 1 r6 r8 (bpf-ja bpf-k 0)));;Lista de Palavras
+        (0 1 r1 r2 (bpf-ja bpf-x bpf-jmp))
+        (0 1 r1 r2 (bpf-ja bpf-x bpf-jmp))
+        (0 1 r5 r6 (bpf-ja bpf-x bpf-jmp))
+        (0 1 r6 r8 (bpf-ja bpf-x bpf-jmp)));;Lista de Palavras
         empty
         ;(( () (()) ));;Grafo
         #t;;Valid
@@ -72,10 +72,10 @@
 (define ProgValidate2(
   term(
         (
-        (0 1 r1 r2 (bpf-ja bpf-k 0))
-        (0 -1 r1 r2 (bpf-ja bpf-k 0))
-        (0 1 r5 r6 (bpf-ja bpf-k 0))
-        (0 1 r6 r8 (bpf-ja bpf-k 0)));;Lista de Palavras
+        (0 1 r1 r2 (bpf-ja bpf-x bpf-jmp))
+        (0 -1 r1 r2 (bpf-ja bpf-x bpf-jmp))
+        (0 1 r5 r6 (bpf-ja bpf-x bpf-jmp))
+        (0 1 r6 r8 (bpf-ja bpf-x bpf-jmp)));;Lista de Palavras
         empty
         ;(( () (()) ));;Grafo
         #t;;Valid
