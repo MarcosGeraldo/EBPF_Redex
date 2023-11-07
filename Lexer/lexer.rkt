@@ -6,7 +6,7 @@
  
  
 (define-tokens value-tokens (NUMBER))
-(define-empty-tokens op-tokens (ASM RESULT EXIT EOF BARS MOV SEP REG ADD NEG NLINE))
+(define-empty-tokens op-tokens (ASM RESULT EXIT EOF MOV SEP REG ADD NEG NLINE))
  
 (define next-token
   (lexer-src-pos
@@ -14,13 +14,12 @@
    [(:+ (:& (:~ #\newline) whitespace)) (return-without-pos (next-token input-port))]
    [#\newline (token-NLINE)]
  ;;["" (token-)]
-   ["--" (token-BARS)]
    ["," (token-SEP)]
    ["%r" (token-REG)]
    ["mov" (token-MOV)]
    ["exit" (token-EXIT)]
-   ["result" (token-RESULT)]
-   ["asm" (token-ASM)]
+   ["-- result" (token-RESULT)]
+   ["-- asm" (token-ASM)]
    ["add" (token-ADD)]
    [#\- (token-NEG)]      
    [(:: (:+ numeric) (:* (:: #\. (:+ numeric) ))) (token-NUMBER (string->number lexeme))]))
