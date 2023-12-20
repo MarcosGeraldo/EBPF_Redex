@@ -1,1 +1,65 @@
 #lang racket
+ 
+(require parser-tools/yacc  "lexer.rkt")
+ 
+(define myparser
+  (parser
+ 
+   (start input)
+   (end EOF)
+   (tokens value-tokens op-tokens )
+   (src-pos)
+   (error (lambda (a b c d e) (begin (printf "a = ~a\nb = ~a\nc = ~a\nd = ~a\ne = ~a\n" a b c d e) (void))))   
+   
+   (grammar
+
+    (input [() '()]           
+           [(input line) (append $1  $2)])
+
+    (line [(NEWLINE) '()]
+          [(TRASH) '() ]
+          [(ASM) '() ]
+          ;[(exp NEWLINE) (list $1)]
+          [(exp) (list $1)]
+          ;;[(exp NEWLINE exp) (list $1)]
+          )
+ 
+    (exp  [(NUMBER) $1]
+          [(EXIT) (fprintf (current-output-port) "exit\n")]
+          [(RESULT) (fprintf (current-output-port) "===\n")]
+          [(HEX) (fprintf (current-output-port) "~a" $1)]
+          ;;[(NEWLINE) (fprintf(current-output-port) "\n" )]
+          ;;[(ADD REG NUMBER SEP REG NUMBER) (format "0 0 r~a r~s(bpf-add bpf-k bpf-alu)\n" $3 $6)]
+          ;[(ADD REG NUMBER SEP REG NUMBER) (begin (printf "0 0 r~a r~s (bpf-add bpf-k bpf-alu)\n" $3 $6) (void))]
+          [(ADD REG NUMBER SEP REG NUMBER) (list 0 0 (string->symbol (format "r~a" $3)) (string->symbol (format "r~s" $6)) '(bpf-add bpf-k bpf-alu))]
+          [(MOV REG NUMBER SEP REG NUMBER) (begin (printf "0 0 r~a r~s (bpf-mov bpf-k bpf-alu)\n" $3 $6) (void))]
+          [(ADD REG NUMBER SEP NUMBER) (begin (printf "~a 0 r~a rNull (bpf-add bpf-x bpf-alu)\n" $5 $3) (void))]
+          [(MOV REG NUMBER SEP NUMBER) (begin (printf "~a 0 r~a rNull (bpf-mov bpf-x bpf-alu)\n" $5 $3) (void))]
+          ;;[(ADD REG NUMBER SEP REG NUMBER) (fprintf (current-output-port) "0 0 r~a r~s (bpf-add bpf-k bpf-alu)\n" $3 $6)]
+          ))))
+             
+(define (parse ip)
+  (port-count-lines! ip)  
+  (myparser (lambda () (next-token ip))))   
+ 
+(provide parse )
+
+;;(parse (open-input-string "add32 %r1, %r2"))
+;;(parse (open-input-string "add32 %r1, %r2 \n add32 %r1, %r2 \n"))
+;;(parse (open-input-string "-- asm add32 %r1, %r2 \n add32 %r1, %r2 \n"))
+;;(parse (open-input-string "-- asm add32 %r1, %r2 \n add32 %r1, %r2 \n -- result \n"))
+;;(parse (open-input-string "-- asm add32 %r1, %r2 \n add32 %r1, %r2 \n exit \n -- result \n 0x3 \n"))
+;;(parse (open-input-string "-- asm add32 %r1, %r2 \n add32 %r1, %r2 \n exit \n -- result \n 0x2a \n"))
+#|
+(parse (open-input-string
+"# Copyright (c) Big Switch Networks, Inc\n
+# SPDX-License-Identifier: Apache-2.0\n
+-- asm\n
+mov32 %r0, 0\n
+mov32 %r1, 2\n
+add32 %r0, 1\n
+add32 %r0, %r1\n
+exit\n
+-- result\n
+0x2a\n"))
+|#

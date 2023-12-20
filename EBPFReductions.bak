@@ -429,14 +429,14 @@
   term(
        ((r0 0) (r1 2) (r2 12) (r3 12) (r4 13) (r5 14) (r6 15) (r7 16) (r8 17) (r9 18) (rP 19) );;Registradores R0 (R1-R5) (R6-R9) R10
        ((1 0 r1 r2 (bpf-mod bpf-k bpf-alu))
-        (1 1 r1 r2 (bpf-xor bpf-k bpf-alu0))
+        (1 1 r1 r2 (bpf-xor bpf-k bpf-alu))
         (1 1 r1 r2 (bpf-mov bpf-k bpf-alu))
         (1 1 r1 r2 (bpf-arsh bpf-k bpf-alu))
         (0 0 r1 r2 (bpf-mod bpf-x bpf-alu))
         (0 1 r1 r2 (bpf-xor bpf-x bpf-alu))
         (0 1 r1 r2 (bpf-mov bpf-x bpf-alu))
         (0 1 r1 r2 (bpf-arsh bpf-x bpf-alu))
-        (0 1 r1 r2 (bpf-neg bpf-k bpf-alu0))
+        (0 1 r1 r2 (bpf-neg bpf-k bpf-alu))
         (0 1 r1 r2 (bpf-neg bpf-x bpf-alu))
         );;Lista de Palavras
        0);; Pc
@@ -474,4 +474,4 @@
       );; Pc
  )
 
-(traces ->exe Prog1)
+;(traces ->exe Prog2)

@@ -17,7 +17,7 @@
   (opcode ::= (msb source lsb)
               eof)
   (msb ::=
-        ;;Arithmetic Instructions
+       ;;Arithmetic Instructions
         ;;Math
          bpf-add bpf-sub bpf-mul bpf-div bpf-mod
         ;;Boolean
@@ -26,8 +26,8 @@
          bpf-lsh bpf-rsh bpf-arsh bpf-xor
         ;;Commands
          bpf-mov bpf-end
-        ;;Jump Instructions
-         bpf-ja
+       ;;Jump Instructions
+        bpf-ja
         ;;Commands
          bpf-call bpf-exit
         ;;Conditioned Jump
