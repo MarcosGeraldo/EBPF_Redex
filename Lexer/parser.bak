@@ -1,6 +1,6 @@
 #lang racket
  
-(require parser-tools/yacc  "lexer.rkt")
+(require redex parser-tools/yacc  "lexer.rkt")
  
 (define myparser
   (parser
@@ -21,20 +21,25 @@
           [(ASM) '() ]
           ;[(exp NEWLINE) (list $1)]
           [(exp) (list $1)]
+          [(EXIT) '()]
+          [(HEX) '()]
+          [(RESULT) '()]
           ;;[(exp NEWLINE exp) (list $1)]
           )
  
     (exp  [(NUMBER) $1]
-          [(EXIT) (fprintf (current-output-port) "exit\n")]
-          [(RESULT) (fprintf (current-output-port) "===\n")]
-          [(HEX) (fprintf (current-output-port) "~a" $1)]
+          ;[(RESULT) (list  (string->symbol "===\n"))]
+          ;[(HEX) (list  $1)]
           ;;[(NEWLINE) (fprintf(current-output-port) "\n" )]
           ;;[(ADD REG NUMBER SEP REG NUMBER) (format "0 0 r~a r~s(bpf-add bpf-k bpf-alu)\n" $3 $6)]
           ;[(ADD REG NUMBER SEP REG NUMBER) (begin (printf "0 0 r~a r~s (bpf-add bpf-k bpf-alu)\n" $3 $6) (void))]
-          [(ADD REG NUMBER SEP REG NUMBER) (list 0 0 (string->symbol (format "r~a" $3)) (string->symbol (format "r~s" $6)) '(bpf-add bpf-k bpf-alu))]
-          [(MOV REG NUMBER SEP REG NUMBER) (begin (printf "0 0 r~a r~s (bpf-mov bpf-k bpf-alu)\n" $3 $6) (void))]
-          [(ADD REG NUMBER SEP NUMBER) (begin (printf "~a 0 r~a rNull (bpf-add bpf-x bpf-alu)\n" $5 $3) (void))]
-          [(MOV REG NUMBER SEP NUMBER) (begin (printf "~a 0 r~a rNull (bpf-mov bpf-x bpf-alu)\n" $5 $3) (void))]
+          [(ADD REG NUMBER SEP REG NUMBER) (list 0 0 (string->symbol (format "r~a" $6)) (string->symbol (format "r~s" $3)) '(bpf-add bpf-x bpf-alu))]
+          [(MOV REG NUMBER SEP REG NUMBER) (list 0 0 (string->symbol (format "r~a" $6)) (string->symbol (format "r~s" $3)) '(bpf-mov bpf-x bpf-alu))]
+          [(ADD REG NUMBER SEP NUMBER) (list $5 0 'r0 (string->symbol (format "r~a" $3)) '(bpf-add bpf-k bpf-alu))]
+          [(MOV REG NUMBER SEP NUMBER) (list $5 0 'r0 (string->symbol (format "r~a" $3)) '(bpf-mov bpf-k bpf-alu))]
+          [(ADD REG NUMBER SEP NEG NUMBER) (list $5 0 'r0 (string->symbol (format "r~a" $3)) '(bpf-add bpf-k bpf-alu))]
+          [(MOV REG NUMBER SEP NEG NUMBER) (list $5 0 'r0 (string->symbol (format "r~a" $3)) '(bpf-mov bpf-k bpf-alu))]
+          ;;[(EXIT) (list 0 0 'r5 'r5 'eof)]
           ;;[(ADD REG NUMBER SEP REG NUMBER) (fprintf (current-output-port) "0 0 r~a r~s (bpf-add bpf-k bpf-alu)\n" $3 $6)]
           ))))
              
@@ -61,5 +66,5 @@ add32 %r0, 1\n
 add32 %r0, %r1\n
 exit\n
 -- result\n
-0x2a\n"))
+0x3\n"))
 |#

@@ -20,9 +20,9 @@
           [(TRASH) '() ]
           [(ASM) '() ]
           ;[(exp NEWLINE) (list $1)]
-          [(exp) (list $1)]
+          [(exp) '()]
           [(EXIT) '()]
-          [(HEX) '()]
+          [(HEX) (list  $1)]
           [(RESULT) '()]
           ;;[(exp NEWLINE exp) (list $1)]
           )
@@ -45,11 +45,11 @@
           ;;[(ADD REG NUMBER SEP REG NUMBER) (fprintf (current-output-port) "0 0 r~a r~s (bpf-add bpf-k bpf-alu)\n" $3 $6)]
           ))))
              
-(define (parse ip)
+(define (parseR ip)
   (port-count-lines! ip)  
   (myparser (lambda () (next-token ip))))   
  
-(provide parse)
+(provide parseR)
 
 ;;(parse (open-input-string "add32 %r1, %r2"))
 ;;(parse (open-input-string "add32 %r1, %r2 \n add32 %r1, %r2 \n"))
@@ -58,7 +58,7 @@
 ;;(parse (open-input-string "-- asm add32 %r1, %r2 \n add32 %r1, %r2 \n exit \n -- result \n 0x3 \n"))
 ;;(parse (open-input-string "-- asm add32 %r1, %r2 \n add32 %r1, %r2 \n exit \n -- result \n 0x2a \n"))
 #|
-(parse (open-input-string
+(parseR (open-input-string
 "# Copyright (c) Big Switch Networks, Inc\n
 # SPDX-License-Identifier: Apache-2.0\n
 -- asm\n
@@ -68,5 +68,5 @@ add32 %r0, 1\n
 add32 %r0, %r1\n
 exit\n
 -- result\n
-0x3\n"))
+0x2a\n"))
 |#

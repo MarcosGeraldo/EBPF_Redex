@@ -388,6 +388,14 @@
    ;;Fechamento da regra BPF_call
    
    ;;Regra BPF_exit
+   (--> ( registers_0 instr_1 pc_1 )
+        (number_1)
+        ;(registers_0 instr_1 ,(+(term pc_1)(term number_3)) )
+        (where (immediate_1 offset_1 sourceReg destinationReg (bpf-exit bpf-x bpf-alu)) (at pc_1 instr_1) )
+        (where number_1 (regread registers_0 r0))
+         ;(where number_2 (regread registers_0 sourceReg))
+         ;(where number_3 (compare number_1 number_2 offset_1 less-eq))
+    )
    ;;Fechamento da regra BPF_exit
    
 
@@ -406,6 +414,7 @@
         (0 1 r1 r2 (bpf-sub bpf-x bpf-alu))
         (0 1 r1 r2 (bpf-mul bpf-x bpf-alu))
         (0 1 r1 r2 (bpf-div bpf-x bpf-alu))
+        ;(0 1 r1 r2 (bpf-exit bpf-x bpf-alu))
         );;Lista de Palavras
        0);; Pc
       )

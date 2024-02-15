@@ -6,40 +6,27 @@
  
  
 (define-tokens value-tokens (NUMBER HEX) )
-(define-empty-tokens op-tokens (ASM RESULT EXIT EOF MOV SEP REG ADD NEG NEWLINE HEXX TRASH NUMBERHEX))
-;(define numeric-hex (range #\0 #\9 #\a #\f #\A #\F))
-;(define hex-digit (range #\0 #\9 #\a #\f #\A #\F))
-;(define hex-digit (~r"[0-9a-fA-F]"))
-;(define-lex-abbrevs
-;  (define-lex-abbrev hex-digit
-;    (range #\0 #\9 #\a #\f #\A #\F)))
-;(define-lex-abbrev hex-digit
-;  (range #\0 #\9 #\a #\f #\A #\F))
-;(define-lex-abbrev hex-digit (~r"[0-9a-fA-F]"))
+(define-empty-tokens op-tokens (ASM RESULT EXIT EOF MOV MOV32 SEP REG ADD ADD32 NEG NEWLINE HEXX TRASH NUMBERHEX))
 (define-lex-abbrev hex-number (:: "0x" (:+ (:or numeric (char-range #\a #\f)))))
  
 (define next-token
   (lexer-src-pos
    [(eof) (token-EOF)]
    [(:+ (:& (:~ #\newline) whitespace)) (return-without-pos (next-token input-port))]
- ;;["" (token-)]
    ["# Copyright (c) Big Switch Networks, Inc\n" (token-TRASH)]
    ["# SPDX-License-Identifier: Apache-2.0\n" (token-TRASH)]
    ["," (token-SEP)]
    ["%r" (token-REG)]
-   ["mov" (token-MOV)]
    ["exit" (token-EXIT)]
    ["-- result" (token-RESULT)]
    ["-- asm" (token-ASM)]
-   ["mov32" (token-MOV)]
-   ["add32" (token-ADD)]
-   [#\- (token-NEG)]
+   ["mov" (token-MOV)]
+   ["mov32" (token-MOV32)]
+   ["add" (token-ADD)]
+   ["add32" (token-ADD32)]
    [hex-number (token-HEX (string->number (string-append "#x" (substring lexeme 2))))]
    [#\newline (token-NEWLINE)]
-   ;[hex (token-NUMBERHEX)]
-   ;[(:: (:+ hex)) (token-NUMBERHEX (string->number lexeme 16))]
-   ;[(hex-digit ...) (token-HEXX (string->number lexeme 16))]
-   [(:: (:+ numeric) (:* (:: #\. (:+ numeric) ))) (token-NUMBER (string->number lexeme))]))
+   [(:: (:* #\-) (:+ numeric) (:* (:: #\. (:+ numeric) ))) (token-NUMBER (string->number lexeme))]))
  
  
 (provide value-tokens op-tokens next-token)

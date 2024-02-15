@@ -11,7 +11,7 @@
   (reduction-relation
    ebpf
    #:domain program
-   #:codomain program
+   ;#:codomain program
    
    ;;Regra BPF_add com bpf-k
    (--> ( registers_0 instr_1 pc_1 )
@@ -474,4 +474,11 @@
       );; Pc
  )
 
-;(traces ->exe Prog2)
+(define (exec program)
+        ->exe program
+ )
+
+
+;;(exec (term( ((r0 0) (r1 11) (r2 11)) ((15 1 r1 r2 (bpf-add bpf-k bpf-alu)))0)))
+;;->exe (term( ((r0 0) (r1 11) (r2 11)) ((15 1 r1 r2 (bpf-add bpf-k bpf-alu)))0))
+;;(traces ->exe Prog1)
